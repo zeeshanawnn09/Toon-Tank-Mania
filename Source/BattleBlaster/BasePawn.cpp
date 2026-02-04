@@ -39,7 +39,18 @@ void ABasePawn::FireBehavior()
 	FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
 	FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
 
-	DrawDebugSphere(GetWorld(), SpawnLocation, 25.0f, 15.0f, FColor::Magenta, false, 5.0f);
+	//DrawDebugSphere(GetWorld(), SpawnLocation, 25.0f, 15.0f, FColor::Magenta, false, 5.0f);
+	AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+	if (Projectile)
+	{
+		Projectile->SetOwner(this);
+		AActor* ProjectileOwner = Projectile->GetOwner();
+		if (ProjectileOwner)
+		{
+			UE_LOG(LogTemp, Display, TEXT("Projectile Owner is: %s"), *ProjectileOwner->GetActorNameOrLabel());
+		}
+		
+	}
 }
 
 
