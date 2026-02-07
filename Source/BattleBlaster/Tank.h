@@ -62,8 +62,14 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
 
+	UPROPERTY(VisibleAnywhere)
+	bool isAlive = true;
+
+	APlayerController* PlayerController;
 	
 	void Movement(const FInputActionValue& MoveVal);
 	void Turn(const FInputActionValue& RotVal);
 
+	void HandleDestruction();
+	void SetPlayerEnabled(bool isEnable);
 };

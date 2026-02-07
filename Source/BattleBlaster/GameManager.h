@@ -22,7 +22,13 @@ protected:
 public:
 	ATank* Tank;
 	int32 EnemyCount;
+	bool Victory = false;
 
+	UPROPERTY(EditAnywhere)
+	float GameOverDelay = 3.0f;
 
+	void ActorDied(AActor* DeadActor);
+
+	void OnGameOverTimeOut();
 	
 };

@@ -24,11 +24,10 @@ void AEnemyTower::Tick(float DeltaTime)
 
 void AEnemyTower::CanFire()
 {
-	if (Tank && IsInRange())
+	if (Tank && Tank->isAlive &&IsInRange())
 	{
 		FireBehavior();
 	}
-
 }
 
 bool AEnemyTower::IsInRange()
@@ -41,4 +40,10 @@ bool AEnemyTower::IsInRange()
 		Result = (Dist2Tank <= FireRange);
 	}
 	return Result;
+}
+
+void AEnemyTower::HandleDestruction()
+{
+	Super::HandleDestruction();
+	Destroy();
 }

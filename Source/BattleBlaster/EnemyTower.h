@@ -35,4 +35,5 @@ public:
 	
 	bool IsInRange();
 	void CanFire();
+	void HandleDestruction();
 };

@@ -4,6 +4,7 @@
 #include "GameManager.h"
 #include "EnemyTower.h"
 #include "Kismet/GameplayStatics.h"
+#include "ToonTankGameInstance.h"
 
 void AGameManager::BeginPlay()
 {
@@ -49,4 +50,61 @@ void AGameManager::BeginPlay()
 		LoopIndex++;
 	}
 	
+}
+
+void AGameManager::ActorDied(AActor* DeadActor)
+{
+	bool IsGameOver = false;
+	
+	if (DeadActor == Tank)
+	{
+		Tank->HandleDestruction();
+		IsGameOver = true;
+	}
+	else
+	{
+		AEnemyTower* DeadEnemy = Cast<AEnemyTower>(DeadActor);
+		if (DeadEnemy)
+		{
+			DeadEnemy->HandleDestruction();
+
+			EnemyCount--;
+			if (EnemyCount == 0)
+			{
+				IsGameOver = true;
+				Victory = true;
+			}
+		}
+	}
+
+	if (IsGameOver)
+	{
+		// Ternary Opeartion to display Victory/Defeat
+		FString GameOverText = Victory ? "Victory!" : "Defeat!";
+		UE_LOG(LogTemp, Display, TEXT("Game Over: %s"), *GameOverText);
+
+		FTimerHandle GameOverTimeHandler;
+		GetWorldTimerManager().SetTimer(GameOverTimeHandler, this, &AGameManager::OnGameOverTimeOut, GameOverDelay, false);
+	}
+}
+
+void AGameManager::OnGameOverTimeOut()
+{
+	UGameInstance* GameInstance = GetGameInstance();
+	if (GameInstance)
+	{
+		UToonTankGameInstance* ToonTankGI = Cast< UToonTankGameInstance>(GameInstance);
+		if (ToonTankGI)
+		{
+			if (Victory)
+			{
+				// Load Next Level
+				ToonTankGI->LoadNextLevel();
+			}
+			else
+			{
+				ToonTankGI->RestartCurrentLevel();
+			}
+		}
+	}
 }

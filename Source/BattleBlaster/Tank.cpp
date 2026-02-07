@@ -24,7 +24,8 @@ void ATank::BeginPlay()
 	Super::BeginPlay();
 	
 	// Start here - Base code for default mapping context
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	PlayerController = Cast < APlayerController>(Controller);
+	if (PlayerController)
 	{
 		if (ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer())
 		{
@@ -42,7 +43,7 @@ void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	
 	if (PlayerController)
 	{
 		FHitResult HitResult;
@@ -86,6 +87,34 @@ void ATank::Turn(const FInputActionValue& RotVal)
 	FRotator DeltaRotation = FRotator(0.0f, 0.0f, 0.0f);
 	DeltaRotation.Yaw = RSpeed * InputValue * GetWorld()->GetDeltaSeconds();
 	AddActorLocalRotation(DeltaRotation, true);
+}
+
+void ATank::HandleDestruction()
+{
+	Super::HandleDestruction();
+	SetActorHiddenInGame(true);
+
+// Disabling Input Handling
+	SetActorTickEnabled(false);
+	SetPlayerEnabled(false);
+
+	isAlive = false;
+}
+
+void ATank::SetPlayerEnabled(bool isEnable)
+{
+	if (PlayerController)
+	{
+		if (isEnable)
+		{
+			EnableInput(PlayerController);
+		}
+		else
+		{
+			DisableInput(PlayerController);	
+		}
+		PlayerController->bShowMouseCursor = isEnable;
+	}
 }
 
 
