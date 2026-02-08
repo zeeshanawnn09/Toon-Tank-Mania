@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "ToonTankGameInstance.h"
 
+
 void AGameManager::BeginPlay()
 {
 	Super::BeginPlay();
@@ -49,7 +50,46 @@ void AGameManager::BeginPlay()
 		
 		LoopIndex++;
 	}
+
+	// Getting the player controller from the world and the index of the player
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (PlayerController)
+	{
+		// If the controller is valid, show the message which will be returned by the Message variable
+		Message = CreateWidget<UPromptUIController>(PlayerController, PromptUIClass);
+
+		// If the message is valid, add the text to the player's screen 
+		if (Message)
+		{
+			Message->AddToPlayerScreen();
+
+			//Assigning the string to the variable
+			Message->SetPromptText("Get Ready!");
+		}
+	}
 	
+	CountdownInSec = GameStrtDelay;
+	GetWorldTimerManager().SetTimer(GameStartDelayHandler, this, &AGameManager::OnGameStartTimeOut, 1.0f, true);
+}
+
+void AGameManager::OnGameStartTimeOut()
+{
+	CountdownInSec--;
+	if (CountdownInSec > 0)
+	{
+		Message->SetPromptText(FString::FromInt(CountdownInSec));
+	}
+	else if (CountdownInSec == 0)
+	{
+		Message->SetPromptText("GO!");
+		Tank->SetPlayerEnabled(true);
+	}
+	else
+	{
+		// To Reset the timer so that it doesn't go negative
+		GetWorldTimerManager().ClearTimer(GameStartDelayHandler);
+		Message->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 void AGameManager::ActorDied(AActor* DeadActor)
@@ -81,7 +121,8 @@ void AGameManager::ActorDied(AActor* DeadActor)
 	{
 		// Ternary Opeartion to display Victory/Defeat
 		FString GameOverText = Victory ? "Victory!" : "Defeat!";
-		UE_LOG(LogTemp, Display, TEXT("Game Over: %s"), *GameOverText);
+		Message->SetPromptText(GameOverText);
+		Message->SetVisibility(ESlateVisibility::Visible);
 
 		FTimerHandle GameOverTimeHandler;
 		GetWorldTimerManager().SetTimer(GameOverTimeHandler, this, &AGameManager::OnGameOverTimeOut, GameOverDelay, false);
@@ -108,3 +149,5 @@ void AGameManager::OnGameOverTimeOut()
 		}
 	}
 }
+
+

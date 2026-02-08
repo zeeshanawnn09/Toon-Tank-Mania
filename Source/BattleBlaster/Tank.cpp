@@ -36,6 +36,9 @@ void ATank::BeginPlay()
 
 		}
 	} // ends here
+
+	// To disable the player at the start of the game
+	SetPlayerEnabled(false);
 }
 
 // Called every frame

@@ -6,7 +6,7 @@
 
 void UToonTankGameInstance::ChangeLevel(int32 Index)
 {
-	if (Index > 0 && Index >= LastLvlIndex)
+	if (Index > 0 && Index <= LastLvlIndex)
 	{
 		CurrLvlIndex = Index;
 

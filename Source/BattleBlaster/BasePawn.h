@@ -6,7 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "Components/CapsuleComponent.h"
 #include "Projectile.h"
-
+#include "NiagaraFunctionLibrary.h"
 #include "BasePawn.generated.h"
 
 UCLASS()
@@ -17,6 +17,15 @@ class BATTLEBLASTER_API ABasePawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ABasePawn();
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* DeathParticles;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* ExplodeAudio;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCameraShakeBase> DeathCamShakeClass;
 
 	UPROPERTY(VisibleAnywhere)
 	UCapsuleComponent* CapsuleComp;

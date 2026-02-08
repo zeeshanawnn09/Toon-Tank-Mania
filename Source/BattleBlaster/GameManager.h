@@ -5,6 +5,7 @@
 #include "Tank.h"
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "PromptUIController.h"
 #include "GameManager.generated.h"
 
 /**
@@ -22,13 +23,24 @@ protected:
 public:
 	ATank* Tank;
 	int32 EnemyCount;
+	int32 CountdownInSec;
 	bool Victory = false;
+
+	UPromptUIController* Message;
+	FTimerHandle GameStartDelayHandler;
 
 	UPROPERTY(EditAnywhere)
 	float GameOverDelay = 3.0f;
 
+	UPROPERTY(EditAnywhere)
+	int32 GameStrtDelay = 4;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UPromptUIController> PromptUIClass;
+
 	void ActorDied(AActor* DeadActor);
 
 	void OnGameOverTimeOut();
+	void OnGameStartTimeOut();
 	
 };
