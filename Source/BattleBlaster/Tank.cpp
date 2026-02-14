@@ -3,6 +3,8 @@
 
 #include "Tank.h"
 #include "InputMappingContext.h"
+#include "HealthBarBehavior.h"
+#include "HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -39,6 +41,21 @@ void ATank::BeginPlay()
 
 	// To disable the player at the start of the game
 	SetPlayerEnabled(false);
+
+	if (HealthBarClass && PlayerController)
+	{
+		HealthBar = CreateWidget<UHealthBarBehavior>(PlayerController, HealthBarClass);
+
+		if (HealthBar)
+		{
+			HealthBar->AddToViewport();
+
+			if (UHealthComponent* HealthComp = FindComponentByClass<UHealthComponent>())
+			{
+				HealthBar->SetHealthComponent(HealthComp);
+			}
+		}
+	}
 }
 
 // Called every frame
@@ -95,6 +112,13 @@ void ATank::Turn(const FInputActionValue& RotVal)
 void ATank::HandleDestruction()
 {
 	Super::HandleDestruction();
+
+	if (HealthBar)
+	{
+		HealthBar->RemoveFromParent();
+		HealthBar = nullptr;
+	}
+
 	SetActorHiddenInGame(true);
 
 // Disabling Input Handling

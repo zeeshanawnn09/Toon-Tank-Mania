@@ -7,6 +7,12 @@
 #include "GameManager.h"
 #include "HealthComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+	FOnHealthChanged,
+	float, CurrentHealth,
+	float, MaxHealth
+);
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLEBLASTER_API UHealthComponent : public UActorComponent
@@ -33,6 +39,9 @@ public:
 	float Health;
 
 	AGameManager* GameManager;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthChanged OnHealthChanged;
 
 	UFUNCTION()
 	void OnDamageTaken(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);

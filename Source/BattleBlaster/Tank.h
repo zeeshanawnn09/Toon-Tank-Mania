@@ -15,6 +15,7 @@
 
 #include "Tank.generated.h"
 
+class UHealthBarBehavior;
 /**
  * 
  */
@@ -72,4 +73,10 @@ public:
 
 	void HandleDestruction();
 	void SetPlayerEnabled(bool isEnable);
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UHealthBarBehavior> HealthBar;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
+	TSubclassOf<UHealthBarBehavior> HealthBarClass;
 };

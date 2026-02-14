@@ -31,6 +31,7 @@ void UHealthComponent::BeginPlay()
 	{
 		GameManager = Cast<AGameManager>(GameMode);
 	}
+	OnHealthChanged.Broadcast(Health, MaxHealth);
 	
 }
 
@@ -48,6 +49,8 @@ void UHealthComponent::OnDamageTaken(AActor* DamagedActor, float Damage, const c
 	if (Damage > 0.0f)
 	{
 		Health -= Damage;
+		OnHealthChanged.Broadcast(Health, MaxHealth);
+
 
 		if (Health <= 0.0f)
 		{
