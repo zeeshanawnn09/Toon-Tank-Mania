@@ -72,6 +72,15 @@ Source/BattleBlaster/
 
 4. Build and run the project
 
+## 🎯 Roadmap
+
+**PlayStation 5 Support** — Coming Soon!
+- Full PS5 deployment planned for the near future
+- Native DualSense controller support
+- Advanced PS5-exclusive features to be announced later this month
+
+Stay tuned for updates!
+
 ## 📸 Screenshots
 
 *Coming soon*
