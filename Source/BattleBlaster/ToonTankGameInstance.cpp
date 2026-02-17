@@ -4,6 +4,21 @@
 #include "ToonTankGameInstance.h"
 #include "Kismet/Gameplaystatics.h"
 
+void UToonTankGameInstance::Init()
+{
+	Super::Init();
+
+	if (BackgroundMusic)
+	{
+		AudioComp = UGameplayStatics::CreateSound2D(GetWorld(), BackgroundMusic, 0.5f, 1.0f, 0.0f, nullptr, true);
+
+		if (AudioComp)
+		{
+			AudioComp->Play();
+		}
+	}
+}
+
 void UToonTankGameInstance::ChangeLevel(int32 Index)
 {
 	if (Index > 0 && Index <= LastLvlIndex)

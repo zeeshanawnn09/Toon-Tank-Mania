@@ -12,6 +12,8 @@ public class BattleBlaster : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
+		bAllowConfidentialPlatformDefines = true;
+
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 		
