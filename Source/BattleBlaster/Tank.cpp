@@ -85,6 +85,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EIC->BindAction(MoveInput, ETriggerEvent::Triggered, this, &ATank::Movement);
 		EIC->BindAction(RotateInput, ETriggerEvent::Triggered, this, &ATank::Turn);
 		EIC->BindAction(FireInput, ETriggerEvent::Started, this, &ATank::FireBehavior);
+		EIC->BindAction(TurretAimInput, ETriggerEvent::Triggered, this, &ATank::TurretAim);
 	}
 }
 
@@ -107,6 +108,21 @@ void ATank::Turn(const FInputActionValue& RotVal)
 	FRotator DeltaRotation = FRotator(0.0f, 0.0f, 0.0f);
 	DeltaRotation.Yaw = RSpeed * InputValue * GetWorld()->GetDeltaSeconds();
 	AddActorLocalRotation(DeltaRotation, true);
+}
+
+void ATank::TurretAim(const FInputActionValue& Value)
+{
+	FVector2D StickInput = Value.Get<FVector2D>();
+	if (!StickInput.IsNearlyZero())
+	{
+		// Normalize to get direction, then scale for distance
+		FVector2D Normalized = StickInput.GetSafeNormal();
+		const float AimDistance = 5000.f; // Increase for more pronounced direction
+		FVector TankLocation = GetActorLocation();
+		FVector LookAtTarget = TankLocation + FVector(Normalized.X, Normalized.Y, 0.f) * AimDistance;
+
+		RotateTurret(LookAtTarget);
+	}
 }
 
 void ATank::HandleDestruction()

@@ -51,6 +51,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* FireInput;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* TurretAimInput;
+
 	UPROPERTY(EditAnywhere)
 	float MSpeed = 600.0f;
 
@@ -70,6 +73,9 @@ public:
 	
 	void Movement(const FInputActionValue& MoveVal);
 	void Turn(const FInputActionValue& RotVal);
+
+	UFUNCTION()
+	void TurretAim(const FInputActionValue& Value);
 
 	void HandleDestruction();
 	void SetPlayerEnabled(bool isEnable);
